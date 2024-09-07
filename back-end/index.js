@@ -7,32 +7,22 @@ const PORT = 3001
 
 
 io.on('connection', socket => {
-    console.log(`user connected sucessfuly ${socket.id}`);
+    console.log("usuario conectado!", socket.id);
 
     socket.on('disconnect', reason => {
-        console.log(`user disconnected ${socket.id}`);
-        
-    } )
-
-    socket.on('set_username', username => {
-        socket.data.username = username;
-
-        io.emit('userInfo', username)
-        console.log("Username enviado para userInfo");
+        console.log("Usuario desconectado:", socket.id);
     })
 
-    
-    
-    socket.on('send_message', text => {
+    socket.on('set_username', username => {
+        socket.data.username = username
+    })
 
-        console.log(`Sending message from ${socket.data.username}`);
-
-        io.emit('mensagem', {
+    socket.on('message', text => {
+        io.emit('receive_message', {
             text,
-            authorId: socket.id
+            authorId: socket.id,
+            author: socket.data.username
         })
-
-        console.log("texto enviado para userInfo");
     })
 
 })
